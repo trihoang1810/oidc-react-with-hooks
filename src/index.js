@@ -1,17 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { AuthProvider } from "oidc-react";
+const oidcConfig = {
+  onSignIn: () => {
+    // Redirect?
+    console.log("onSignIn");
+  },
+  authority: "https://authenticationserver20220111094343.azurewebsites.net",
+  clientId: "react-client",
+  redirectUri: "http://localhost:3000/signin-oidc",
+  scope: "openid profile native-client-scope",
+  responseType: "id_token token",
+  postLogoutRedirectUri: "http://localhost:3000/signout-oidc",
+};
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <AuthProvider {...oidcConfig}>
+      <App />
+    </AuthProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
 reportWebVitals();
